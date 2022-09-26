@@ -7,6 +7,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +68,7 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = Util.getSessionFactory().openSession()) {
             tr = session.beginTransaction();
             session.save(userExamp);
-             session.save(userExamp);
+            session.save(userExamp);
             tr.commit();
             System.out.println("New User: " + userExamp);
         } catch (Exception e) {
@@ -94,11 +100,16 @@ public class UserDaoHibernateImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> allUsers = new ArrayList<>();
         Transaction tr = null;
-        String settings ="SELECT id, name, lastName, age FROM user " ;
         try (Session session = Util.getSessionFactory().openSession()) {
             tr = session.beginTransaction();
-            allUsers = session.createSQLQuery(settings).getResultList();
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<User> cq = cb.createQuery(User.class);
+            Root<User> rootEntry = cq.from(User.class);
+            CriteriaQuery<User> all = cq.select(rootEntry);
+            TypedQuery<User> allquery = session.createQuery(all);
+            allUsers = allquery.getResultList();
             tr.commit();
+            allUsers.forEach(System.out::println);
         } catch (Exception e) {
             e.printStackTrace();
         }

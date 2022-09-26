@@ -7,10 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="PP_1_1_3_JDBC" />
-        <module name="TaskJDBC" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="PP_1_1_4_Hibernate" target="1.5" />
       <module name="untitled" target="17" />
     </bytecodeTargetLevel>
   </component>
